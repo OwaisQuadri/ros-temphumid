@@ -26,7 +26,7 @@ class Home(APIView):
         temp=Temperature.objects.last().temperature
         humidity=Temperature.objects.last().humidity
         
-        while Temperature.objects.count() > 288:
+        while Temperature.objects.count() > 5:#288
             #delete smallest ID object
             try:
                 oof=Temperature.objects.first()
