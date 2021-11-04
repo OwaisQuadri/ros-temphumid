@@ -26,11 +26,11 @@ class Home(APIView):
         temp=Temperature.objects.last().temperature
         humidity=Temperature.objects.last().humidity
         
-        while Temperature.objects.count() > 5:#288
+        while Temperature.objects.count() > 288:#recorded every 5 mins, in 24 hours
             #delete smallest ID object
             try:
-                oof=Temperature.objects.first()
-                oof.delete()
+                record=Temperature.objects.first()
+                record.delete()
                 print("record deleted")
             except:
                 print("record DNE")
