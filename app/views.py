@@ -26,7 +26,14 @@ class Home(APIView):
         temp=Temperature.objects.last().temperature
         humidity=Temperature.objects.last().humidity
         
-        print(temp," ",humidity)
+        while Temperature.objects.count() > 288:
+            #delete smallest ID object
+            try:
+                oof=Temperature.objects.first()
+                oof.delete()
+                print("record deleted")
+            except:
+                print("record DNE")
         context={
             'temp': temp,
             'humidity':humidity
