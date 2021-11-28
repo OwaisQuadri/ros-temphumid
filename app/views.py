@@ -16,17 +16,13 @@ class History(APIView):
     def get(self, request):
         temps = Temperature.objects.all()
         ser=TempSerializer(temps, many=True)
-        context={
-            'historyJSON': ser.data
-        }
-        return render(request, 'history.html',context)
+        return Response(ser.data, status=status.HTTP_200_OK)
 
 class Home(APIView):
     def get(self,request):
-        temp=Temperature.objects.last().temperature
-        humidity=Temperature.objects.last().humidity
-        
-        while Temperature.objects.count() > 288:#recorded every 5 mins, in 24 hours
+        temp=Temperature.objects.last()
+        ser=TempSerializer(temp)
+        while Temperature.objects.count() > 60:#recorded every 1 mins, in the last hour
             #delete smallest ID object
             try:
                 record=Temperature.objects.first()
@@ -34,11 +30,7 @@ class Home(APIView):
                 print("record deleted")
             except:
                 print("record DNE")
-        context={
-            'temp': temp,
-            'humidity':humidity
-        }
-        return render(request, 'temp.html',context)
+        return Response(ser.data, status=status.HTTP_200_OK)
 
     @csrf_exempt
     def post(self,request):
