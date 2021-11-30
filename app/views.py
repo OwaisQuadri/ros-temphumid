@@ -21,19 +21,15 @@ class History(APIView):
 class Home(APIView):
     def get(self,request):
         #save uniqe names
-        repeat=False
         temps=Temperature.objects.none()
+        T=Temperature.objects.all()
         names=[]
-        count=1
-        while not repeat:
-            current=Temperature.objects.get(Temperature.objects.count()-count)
-            
-            if current.name not in names:
-                temps |= current
-                names.append(current.name)
-            else:
-                repeat=True
-            count+=1
+        for t in T:
+            if t.name not in names:
+                names.append(t.name)
+                temps|=t 
+        
+
         ser=TempSerializer(temps, many=True)
         
         return Response(ser.data, status=status.HTTP_200_OK)
