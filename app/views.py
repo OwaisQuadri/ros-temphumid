@@ -27,7 +27,7 @@ class Home(APIView):
         for t in T:
             if t.name not in names:
                 names.append(t.name)
-                temps=temps+t 
+                temps|=Temperature.objects.filter(pk=t.pk)
         
 
         ser=TempSerializer(temps, many=True)
