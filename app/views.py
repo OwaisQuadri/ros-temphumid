@@ -24,7 +24,7 @@ class Home(APIView):
         temps=Temperature.objects.none()
         T=Temperature.objects.all()
         names=[]
-        for t in T:
+        for t in reversed(T):
             if t.name not in names:
                 names.append(t.name)
                 temps|=Temperature.objects.filter(pk=t.pk)
