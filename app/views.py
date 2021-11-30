@@ -14,13 +14,26 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 class History(APIView):
     def get(self, request):
-        temps = Temperature.objects.all()
+        #save uniqe names
+        repeat=False
+        temps=Temperature.objects.none()
+        names=[]
+        count=1
+        while not repeat:
+            current=Temperature.objects.all()[Temperature.objects.count()-count]
+            
+            if current.name not in names:
+                temps |= current
+                names.append(current.name)
+            else:
+                repeat=True
+            count+=1
         ser=TempSerializer(temps, many=True)
         return Response(ser.data, status=status.HTTP_200_OK)
 
 class Home(APIView):
     def get(self,request):
-        temp=Temperature.objects.last()
+        temp=Temperature.objects.filter()
         ser=TempSerializer(temp)
         
         return Response(ser.data, status=status.HTTP_200_OK)
