@@ -22,20 +22,23 @@ class Home(APIView):
     def get(self,request):
         temp=Temperature.objects.last()
         ser=TempSerializer(temp)
-        while Temperature.objects.count() > 60:#recorded every 1 mins, in the last hour
-            #delete smallest ID object
-            try:
-                record=Temperature.objects.first()
-                record.delete()
-                print("record deleted")
-            except:
-                print("record DNE")
+        
         return Response(ser.data, status=status.HTTP_200_OK)
 
     @csrf_exempt
     def post(self,request):
+        
         ser=TempSerializer(data=request.data)
         if ser.is_valid():
             ser.save()
+            objs=Temperature.objects.filter(name=ser.data.get('name'))
+            while objs.count() > 60:#recorded every 1 mins, in the last hour
+            #delete smallest ID object
+                try:
+                    record=objs.first()
+                    record.delete()
+                    print("record deleted")
+                except:
+                    print("record DNE")
             return Response(ser.data,status=status.HTTP_201_CREATED)
         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
