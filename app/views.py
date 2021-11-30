@@ -26,7 +26,7 @@ class Home(APIView):
         names=[]
         count=1
         while not repeat:
-            current=Temperature.objects.all()[Temperature.objects.count()-count]
+            current=Temperature.objects.get(Temperature.objects.count()-count)
             
             if current.name not in names:
                 temps |= current
