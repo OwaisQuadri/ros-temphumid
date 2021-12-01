@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 class History(APIView):
     def get(self, request):
-        temps = Temperature.objects.all()
+        temps = Temperature.objects.all().order_by('id')
         ser=TempSerializer(temps, many=True)
         return Response(ser.data, status=status.HTTP_200_OK)
 
@@ -22,7 +22,7 @@ class Home(APIView):
     def get(self,request):
         #save uniqe names
         temps=Temperature.objects.none()
-        T=Temperature.objects.all()
+        T=Temperature.objects.all().order_by('id')
         names=[]
         for t in T:
             if t.name not in names:
