@@ -44,7 +44,7 @@ class Home(APIView):
             while objs.count() > 60:#recorded every 1 mins, in the last hour
             #delete smallest ID object
                 try:
-                    record=objs.order_by("date").first()
+                    record=objs.order_by("id").first()
                     record.delete()
                     print("record deleted")
                 except:
